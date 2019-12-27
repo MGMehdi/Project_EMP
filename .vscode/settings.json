@@ -1,0 +1,16 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "sqltools.connections": [
+        {
+            "database": "test",
+            "dialect": "PostgreSQL",
+            "isActive": false,
+            "isConnected": false,
+            "name": "Test",
+            "password": "postgres",
+            "port": 5432,
+            "server": "192.168.1.128",
+            "username": "postgres"
+        }
+    ]
+}
