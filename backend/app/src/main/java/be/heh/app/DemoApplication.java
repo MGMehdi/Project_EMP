@@ -6,34 +6,40 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import be.heh.app.db.DatabaseHelper;
 import be.heh.app.employee.Employee;
-import be.heh.app.employee.emp_type.Commission;
-import be.heh.app.employee.emp_type.Hourly;
-import be.heh.app.employee.emp_type.Salaried;
+import be.heh.app.employee.classification.*;
+import be.heh.app.employee.method.Deposit;
+import be.heh.app.employee.method.Mailed;
 
 @SpringBootApplication
 public class DemoApplication {
 
 	public static void main(String[] args) {
 		Employee e = new Employee();
-		e.set_name("tata");
-		e.set_address("tata city");
-		e.set_bank("tata $");
-		e.set_salary(2000.5);
-		DatabaseHelper db = new DatabaseHelper();
-		ArrayList<Double>hours = new ArrayList<>();
-
-		hours.add(10.0);
-		hours.add(11.0);
-		hours.add(12.0);
-		hours.add(13.0);
-
-		e.set_hours(hours);
+		ArrayList<Employee> employees = new ArrayList<>();
+		e.set_name("Mehdi");
+		 e.set_address("Erbisoeul");
+		 e.set_salary(3000);
+		 e.set_hourlyRate(10.0);
+		 e.set_hour(10.0);
+		 e.set_account("BE795");
+		 e.set_classification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+		e.set_method(new Mailed());
 		
+		DatabaseHelper db = new DatabaseHelper();
 
-		e.set_empType(new Salaried(e.get_salary()));
-		System.out.println(e.calculatePay());
-		db.AddEmployee(e);
-		System.out.println(e.get_name());
+		//db.AddEmployee(e);
+		db.GetEmployee(e);
+		//db.GetAllEmployee(employees);
+		db.DeleteEmployee(e);
+
+		System.out.println(e.get_empID() + " " + e.get_name() + " " + e.calculatePay());
+
+		for (Employee employee : employees) {
+			System.out.println(employee.get_empID() + " " + employee.get_name() + " " + employee.calculatePay());
+
+		}
+
+		
 
 		
 	}

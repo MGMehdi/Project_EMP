@@ -5,8 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import be.heh.app.employee.Employee;
+import be.heh.app.employee.classification.Commission;
+import be.heh.app.employee.classification.Hourly;
+import be.heh.app.employee.classification.Salaried;
+import be.heh.app.employee.method.Deposit;
+import be.heh.app.employee.method.Mailed;
+import be.heh.app.employee.method.PayMaster;
 
 /**
  * DatabaseHelper
@@ -36,14 +43,14 @@ public class DatabaseHelper {
     public Employee AddEmployee(Employee e) {
 
         String sql;
-        sql = "INSERT INTO public.employee (name, address, bank) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = this.connection.prepareStatement(sql, new String[] {"id"})) {
+        sql = "INSERT INTO public.employee (name) VALUES (?)";
+        try {
+            /** ADD EMPLOYEE **/
+            PreparedStatement ps = this.connection.prepareStatement(sql, new String[] { "id" });
             ps.setString(1, e.get_name());
-            ps.setString(2, e.get_address());
-            ps.setString(3, e.get_bank());
             int empId = ps.executeUpdate();
             if (empId > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()){
+                try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         e.set_empID(rs.getInt("id"));
                         System.out.println(e.get_empID());
@@ -52,27 +59,57 @@ public class DatabaseHelper {
                     System.out.println(se);
                 }
             }
-             switch (e.get_empType().getClass().getSimpleName()) {
-             case "Salaried":
-                 sql = "INSERT INTO salaried (id, salary) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
-                 PreparedStatement p = this.connection.prepareStatement(sql);
-                 p.setInt(1, e.get_empID());
-                 System.out.println(e.get_salary());
-                 p.setDouble(2, e.get_salary());
-                 p.executeUpdate();
-                 break;
+            /* ADD CLASSIFICATION */
+            switch (e.get_classification().getClass().getSimpleName()) {
+            case "Salaried":
+                sql = "INSERT INTO salaried (id, salary) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
+                ps = this.connection.prepareStatement(sql);
+                ps.setInt(1, e.get_empID());
+                ps.setDouble(2, e.get_salary());
+                ps.executeUpdate();
+                break;
 
-             case "Hourly":
-                 System.out.println("Hourly");
+            case "Hourly":
+                sql = "INSERT INTO hourly (id, hours, hourly_rate) VALUES ((SELECT id FROM employee WHERE id=?), ?, ?)";
+                ps = this.connection.prepareStatement(sql);
+                ps.setInt(1, e.get_empID());
+                ps.setDouble(2, e.get_hour());
+                ps.setDouble(3, e.get_hourlyRate());
+                ps.executeUpdate();
+                break;
 
-                 break;
+            case "Commission":
+                sql = "INSERT INTO commission (id, salary, commission_rate) VALUES ((SELECT id FROM employee WHERE id=?), ?, ?)";
+                ps = this.connection.prepareStatement(sql);
+                ps.setInt(1, e.get_empID());
+                ps.setDouble(2, e.get_salary());
+                ps.setDouble(3, e.get_commissionRate());
+                ps.executeUpdate();
+                break;
+            default:
+                break;
+            }
 
-             case "Commission":
-                 System.out.println("Commission");
-                 break;
-             default:
-                 break;
-             }
+            /* ADD METHOD */
+            switch (e.get_method().getClass().getSimpleName()) {
+            case "Deposit":
+                sql = "INSERT INTO deposit (id, account) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
+                ps = this.connection.prepareStatement(sql);
+                ps.setInt(1, e.get_empID());
+                ps.setString(2, e.get_account());
+                ps.executeUpdate();
+                break;
+            case "Mailed":
+                sql = "INSERT INTO mailed (id, address) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
+                ps = this.connection.prepareStatement(sql);
+                ps.setInt(1, e.get_empID());
+                ps.setString(2, e.get_address());
+                ps.executeUpdate();
+                break;
+            default:
+                break;
+            }
+
         } catch (SQLException se) {
             System.out.println("Add emp : " + se);
         }
@@ -80,21 +117,202 @@ public class DatabaseHelper {
         return e;
     }
 
+    /******************************************************************/
+
     public Employee GetEmployee(Employee e) {
-        String sql = "SELECT * FROM employee WHERE id=?";
+        String sql = "SELECT * FROM employee WHERE name = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
-            ps.setInt(1, e.get_empID());
+            ps.setString(1, e.get_name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                e.set_name(rs.getString("name"));
+                e.set_empID(rs.getInt("id"));
+                GetInfo(e);
             }
             if (e.get_name() == null) {
                 System.out.println("User not found");
             }
-        } catch (Exception se) {
+
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        return e;
+    }
+
+    public ArrayList GetAllEmployee(ArrayList employees) {
+        Employee e = null;
+        String sql = "SELECT * FROM employee";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e = new Employee(rs.getInt("id"), rs.getString("name"));
+                employees.add(GetInfo(e));
+            }
+        } catch (SQLException sq) {
+            System.out.println(sq);
+        }
+
+        return employees;
+    }
+
+    private Employee GetInfo(Employee e) {
+        // SALARIED
+        String sql = "SELECT * FROM salaried WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_salary(rs.getInt("salary"));
+                e.set_classification(new Salaried(e.get_salary()));
+            }
+            if (e.get_salary() == 0) {
+                System.out.println("Not a salaried");
+            }
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+        // COMMISSION
+        sql = "SELECT * FROM commission WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_salary(rs.getDouble("salary"));
+                e.set_commissionRate(rs.getDouble("commission_rate"));
+                e.set_classification(new Commission(e.get_salary()));
+            }
+            if (e.get_salary() == 0 && e.get_commissionRate() == 0) {
+                System.out.println("Not a commission");
+            }
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+        // HOURLY
+        sql = "SELECT * FROM hourly WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_hour(rs.getDouble("hours"));
+                e.set_hourlyRate(rs.getDouble("hourly_rate"));
+                e.set_classification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+            }
+            if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
+                System.out.println("Not a hourly");
+            }
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+        // Mailed
+        sql = "SELECT * FROM mailed WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_address(rs.getString("address"));
+                e.set_method(new Mailed());
+            }
+            if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
+                System.out.println("Not a mailed");
+            }
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+        // Deposit
+        sql = "SELECT * FROM deposit WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_account(rs.getString("account"));
+                e.set_method(new Deposit());
+            }
+            if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
+                System.out.println("Not a deposit");
+            }
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+        // Paymaster
+        sql = "SELECT * FROM paymaster WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.set_address(rs.getString("address"));
+                e.set_method(new PayMaster());
+            }
+            if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
+                System.out.println("Not a paymaster");
+            }
+        } catch (SQLException se) {
             System.out.println(se);
         }
         return e;
+    }
+
+    public void DeleteEmployee(Employee e) {
+        String sql = "DELETE FROM hourly where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM salaried where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM commission where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM mailed where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM deposit where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM paymaster where id IN (SELECT ? FROM employee)";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
+
+        sql = "DELETE FROM employee where id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+            ps.setInt(1, e.get_empID());
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println(se);
+        }
     }
 
 }

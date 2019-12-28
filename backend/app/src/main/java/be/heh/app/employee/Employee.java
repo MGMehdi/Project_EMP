@@ -2,7 +2,8 @@ package be.heh.app.employee;
 
 import java.util.ArrayList;
 
-import be.heh.app.employee.emp_type.I_EmpType;
+import be.heh.app.employee.classification.*;
+import be.heh.app.employee.method.I_Method;
 
 /**
  * Employee
@@ -12,19 +13,22 @@ public class Employee {
     private int _empID = 0;
     private String _name = "";
     private String _address = "";
-    private String _bank = "";
-    private I_EmpType _empType;
+    private String _account = "";
+    private I_Classification _classification;
+    private I_Method _method;
 
     private double _hourlyRate;
-    private ArrayList <Double> _hours = new ArrayList();
+    private double _hour;
+    private ArrayList <Double> _hours = new ArrayList<>();
     private double _salary;
+    private double _commissionRate;
 
     public Employee() {
     }
 
-    public Employee(String _name, String _address) {
+    public Employee(int _id, String _name) {
+        this._empID = _id;
         this._name = _name;
-        this._address = _address;
     }
 
     /**********************************************************************************************************/
@@ -53,22 +57,30 @@ public class Employee {
         this._address = _address;
     }
 
-    public String get_bank() {
-        return _bank;
+    public String get_account() {
+        return _account;
     }
 
-    public void set_bank(String _bank) {
-        this._bank = _bank;
+    public void set_account(String _account) {
+        this._account = _account;
     }
 
-    public I_EmpType get_empType() {
-        return _empType;
+    public I_Classification get_classification() {
+        return _classification;
     }
 
-    public void set_empType(I_EmpType _empType) {
-        this._empType = _empType;
+    public void set_classification(I_Classification _classification) {
+        this._classification = _classification;
     }
 
+    public I_Method get_method() {
+        return _method;
+    }
+
+    public void set_method(I_Method _method) {
+        this._method = _method;
+    }
+    
     public double get_hourlyRate() {
         return _hourlyRate;
     }
@@ -77,12 +89,12 @@ public class Employee {
         this._hourlyRate = _hourlyRate;
     }
 
-    public ArrayList get_hours() {
-        return _hours;
+    public double get_hour() {
+        return _hour;
     }
 
-    public void set_hours(ArrayList<Double> _hours) {
-        this._hours = _hours;
+    public void set_hour(Double _hour) {
+        this._hour = _hour;
     }
 
     public double get_salary() {
@@ -92,12 +104,27 @@ public class Employee {
     public void set_salary(double _salary) {
         this._salary = _salary;
     }
+    
+    public double get_commissionRate() {
+        return _commissionRate;
+    }
 
+    public void set_commissionRate(double _commissionRate) {
+        this._commissionRate = _commissionRate;
+    }
     /*****************************************************************************************************/
 
     public double calculatePay() {
-        return this._empType.get_pay();
+        return this._classification.get_pay();
     }
+
+    
+
+    
+
+    
+
+	
 
     
 
