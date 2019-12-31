@@ -15,8 +15,9 @@ export class FindUser extends Component {
 
         }
     }
-
     render() {
+        console.log(this.state.employee)
+
         return (
             <div>
                 <h1>Find an employee</h1>
@@ -28,7 +29,7 @@ export class FindUser extends Component {
                     <p>id : {this.state.id}</p>
                     <p>account : {this.state.account}</p>
                     <p>address : {this.state.address}</p>
-
+                    {JSON.stringify(this.state.employee)}
                 </div>
             </div>
         )
@@ -43,16 +44,14 @@ export class FindUser extends Component {
     onClick = () => {
         Axios.get(`http://localhost:8080/user/${this.state.name}`)
             .then((res) => {
-                console.log(res.data)
                 this.setState({
                     employee: res.data,
                     id: res.data._empID,
                     account: res.data._account,
-                    address: res.data._address
+                    address: res.data._address         
                 })
 
             }).catch(err => console.log(err))
-
     }
 }
 export default FindUser

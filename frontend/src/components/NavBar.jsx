@@ -11,7 +11,7 @@ class NavBar extends Component {
                     <div><a className="navbar-brand" href="/">EMPLOYEE</a></div>
                     <ul className="navbar-nav">
                        <li><Link className="nav-link" to="/user">Find</Link></li>
-                       <li><Link className="nav-link" to="/todos"></Link></li>
+                       <li><Link className="nav-link" to="/users">List</Link></li>
                     </ul>
                     <ul className="navbar-nav navbar-collapse justify-content-end">
                         <li><Link className="nav-link" to="/login">Login</Link></li>
