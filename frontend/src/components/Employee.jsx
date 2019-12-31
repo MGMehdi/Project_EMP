@@ -7,7 +7,7 @@ export class Employee extends Component {
 
         this.state = {
             employee: null,
-            name: "Idriss",
+            name: this.props.match.params.name,
             id: null
         }
     }
@@ -16,9 +16,9 @@ export class Employee extends Component {
         Axios.get(`http://localhost:8080/user/${this.state.name}`)
             .then((res) => {
                 console.log(res.data)
-                    this.setState({ employee: res.data })
-                    this.setState({ name: res.data._name })
-                    this.setState({ id: res.data._empID })
+                this.setState({ employee: res.data })
+                this.setState({ name: res.data._name })
+                this.setState({ id: res.data._empID })
 
             }).catch(err => console.log(err))
     }
@@ -26,7 +26,8 @@ export class Employee extends Component {
     render() {
         return (
             <div>
-                <h1>Employee</h1>
+                <h1>Employee {this.props.match.params.name}</h1>
+
                 <h2>{this.state.name}</h2>
                 <h2>{this.state.id}</h2>
             </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
+import './bootstrap.css'
 import './App.css';
-import Rout from './Rout.jsx';
+import Rout from './components/Rout';
 
 function App() {
   return (
