@@ -99,7 +99,7 @@ public class Controller {
         }
 
         db.AddEmployee(e);
-        System.out.println(e.get_Iclassification().getClass().getSimpleName());
+        System.out.println(e.get_classification());
         return ResponseEntity.ok(e);
     }
     // public ResponseEntity addUser(@RequestBody String json) {

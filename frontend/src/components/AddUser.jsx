@@ -32,16 +32,16 @@ export class AddUser extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Name</label>
-                        <input name="name" type="text" className="form-control" placeholder="Name" onChange={this.handleChange} />
+                        <input name="name" type="text" className="form-control" placeholder="Name" onChange={this.handleChangeInfo} />
                         <label>Address</label>
-                        <input name="address" type="text" className="form-control" placeholder="Address" onChange={this.handleChange} />
+                        <input name="address" type="text" className="form-control" placeholder="Address" onChange={this.handleChangeInfo} />
                         <label>Account</label>
-                        <input name="account" type="text" className="form-control" placeholder="Account" onChange={this.handleChange} />
+                        <input name="account" type="text" className="form-control" placeholder="Account" onChange={this.handleChangeInfo} />
                     </div>
 
                     <div className="form-group">
                         <label>Classification</label>
-                        <select className="form-control" id="classification" onChange={this.handleChange}>
+                        <select className="form-control" id="classification" onChange={this.handleChangeCommissionMethod}>
                             <option>---</option>
                             <option value="Commission">Commission</option>
                             <option value="Hourly">Hourly</option>
@@ -49,25 +49,25 @@ export class AddUser extends Component {
                         </select>
                         <div>
                             <label>Salary</label>
-                            <input type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} />
+                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} onChange={this.handleChangeSalary}/>
                         </div>
                         <div>
                             <label>Hours</label>
-                            <input type="number" className="form-control" placeholder="Hours" disabled={!this.state.Hourly} />
+                            <input name="hours" type="number" className="form-control" placeholder="Hours" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
                             <label>Hourly rate</label>
-                            <input type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} />
+                            <input name="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
                         </div>
                         <div>
                             <label>Salary</label>
-                            <input type="number" className="form-control" placeholder="Salary" disabled={!this.state.Commission} />
+                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
                             <label>Commission</label>
-                            <input type="number" className="form-control" placeholder="Commission" disabled={!this.state.Commission} />
+                            <input name="commission" type="number" className="form-control" placeholder="Commission" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
                         </div>
                     </div>
 
                     <div className="form-group">
                         <label>Paiement method</label>
-                        <select className="form-control" id="method" onChange={this.handleChange}>
+                        <select className="form-control" id="method" onChange={this.handleChangeCommissionMethod}>
                             <option>---</option>
                             <option value="Deposit">Direct deposit</option>
                             <option value="Mailed">Mailed</option>
@@ -80,7 +80,36 @@ export class AddUser extends Component {
         )
     }
 
-    handleChange = (event) => {
+    handleChangeSalary = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+            commission:0,
+            hours:0,
+            hourly:0
+        })
+    }
+    handleChangeCommission = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+            hours:0,
+            hourly:0
+        })
+    }
+    handleChangeHours = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+            commission:0,
+            salary:0
+        })
+    }
+
+    handleChangeInfo = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+    handleChangeCommissionMethod = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
