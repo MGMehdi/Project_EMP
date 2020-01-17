@@ -12,6 +12,7 @@ class NavBar extends Component {
                     <ul className="navbar-nav">
                        <li><Link className="nav-link" to="/user">Find</Link></li>
                        <li><Link className="nav-link" to="/users">List</Link></li>
+                       <li><Link className="nav-link" to="/add">Add</Link></li>
                     </ul>
                     <ul className="navbar-nav navbar-collapse justify-content-end">
                         <li><Link className="nav-link" to="/login">Login</Link></li>

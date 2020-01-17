@@ -4,6 +4,7 @@ import Employee from './Employee'
 import NavBar from './NavBar'
 import FindUser from './FindUser';
 import DisplayAll from './DisplayAll';
+import AddUser from './AddUser';
 
 function Rout() {
     return (
@@ -14,6 +15,7 @@ function Rout() {
                     <Route path="/user" component={FindUser}></Route>
                     <Route path="/users" component={DisplayAll}></Route>
                     <Route path="/user/:name" component={Employee}></Route>
+                    <Route path="/add" component={AddUser}></Route>
                 </Switch>
             </Router>
         </div>

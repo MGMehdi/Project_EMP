@@ -11,11 +11,13 @@ import be.heh.employee.method.I_Method;
 public class Employee {
 
     private int _empID = 0;
-    private String _name = "";
-    private String _address = "";
-    private String _account = "";
-    private I_Classification _classification;
-    private I_Method _method;
+    private String _name;
+    private String _address;
+    private String _account;
+    private I_Classification _Iclassification;
+    private String _classification;
+    private I_Method _Imethod;
+    private String _method;
 
     private double _hourlyRate;
     private double _hour;
@@ -65,20 +67,20 @@ public class Employee {
         this._account = _account;
     }
 
-    public I_Classification get_classification() {
-        return _classification;
+    public I_Classification get_Iclassification() {
+        return _Iclassification;
     }
 
-    public void set_classification(I_Classification _classification) {
-        this._classification = _classification;
+    public void set_Iclassification(I_Classification _Iclassification) {
+        this._Iclassification = _Iclassification;
     }
 
-    public I_Method get_method() {
-        return _method;
+    public I_Method get_Imethod() {
+        return _Imethod;
     }
 
-    public void set_method(I_Method _method) {
-        this._method = _method;
+    public void set_Imethod(I_Method _Imethod) {
+        this._Imethod = _Imethod;
     }
     
     public double get_hourlyRate() {
@@ -112,11 +114,31 @@ public class Employee {
     public void set_commissionRate(double _commissionRate) {
         this._commissionRate = _commissionRate;
     }
+
+    public String get_classification() {
+        return _classification;
+    }
+
+    public String get_method() {
+        return _method;
+    }
+
+    public void set_classification(String _classification) {
+        this._classification = _classification;
+    }
+
+    public void set_method(String _method) {
+        this._method = _method;
+    }
+
     /*****************************************************************************************************/
 
     public double calculatePay() {
-        return this._classification.get_pay();
+        return this._Iclassification.get_pay();
     }
+
+    
+    
 
     
 

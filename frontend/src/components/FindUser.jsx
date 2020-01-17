@@ -12,7 +12,7 @@ export class FindUser extends Component {
             id: null,
             address : "",
             account : "",
-
+            classification:""
         }
     }
     render() {
@@ -29,6 +29,7 @@ export class FindUser extends Component {
                     <p>id : {this.state.id}</p>
                     <p>account : {this.state.account}</p>
                     <p>address : {this.state.address}</p>
+                    <p>classification : {this.state.classification}</p>
                     {JSON.stringify(this.state.employee)}
                 </div>
             </div>
@@ -48,9 +49,10 @@ export class FindUser extends Component {
                     employee: res.data,
                     id: res.data._empID,
                     account: res.data._account,
-                    address: res.data._address         
+                    address: res.data._address,
+                    classification:res.data._classification
                 })
-
+                
             }).catch(err => console.log(err))
     }
 }

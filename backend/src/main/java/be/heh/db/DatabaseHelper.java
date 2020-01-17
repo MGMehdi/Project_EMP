@@ -19,7 +19,7 @@ import be.heh.employee.method.PayMaster;
  * DatabaseHelper
  */
 public class DatabaseHelper {
-    private String url = "jdbc:postgresql://192.168.1.128/test";
+    private String url = "jdbc:postgresql://192.168.0.211/postgres";
     private String user = "postgres";
     private String password = "postgres";
     private Connection connection = null;
@@ -70,7 +70,7 @@ public class DatabaseHelper {
 
     private Employee AddInfo(Employee e) {
         String sql;
-        switch (e.get_classification().getClass().getSimpleName()) {
+        switch (e.get_Iclassification().getClass().getSimpleName()) {
         case "Salaried":
             sql = "INSERT INTO salaried (id, salary) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
@@ -111,7 +111,7 @@ public class DatabaseHelper {
         }
 
         /* ADD METHOD */
-        switch (e.get_method().getClass().getSimpleName()) {
+        switch (e.get_Imethod().getClass().getSimpleName()) {
         case "Deposit":
             sql = "INSERT INTO deposit (id, account) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
@@ -149,14 +149,14 @@ public class DatabaseHelper {
                 e.set_empID(rs.getInt("id"));
                 GetInfo(e);
             }
-            if (e.get_name() == null) {
+            if (e.get_empID() == 0) {
                 System.out.println("User not found");
+                return null;
             }
 
         } catch (SQLException se) {
             System.out.println(se);
         }
-
         return e;
     }
 
@@ -184,7 +184,7 @@ public class DatabaseHelper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 e.set_salary(rs.getInt("salary"));
-                e.set_classification(new Salaried(e.get_salary()));
+                e.set_Iclassification(new Salaried(e.get_salary()));
             }
             if (e.get_salary() == 0) {
                 System.out.println("Not a salaried");
@@ -200,7 +200,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_salary(rs.getDouble("salary"));
                 e.set_commissionRate(rs.getDouble("commission_rate"));
-                e.set_classification(new Commission(e.get_salary()));
+                e.set_Iclassification(new Commission(e.get_salary()));
             }
             if (e.get_salary() == 0 && e.get_commissionRate() == 0) {
                 System.out.println("Not a commission");
@@ -216,7 +216,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_hour(rs.getDouble("hours"));
                 e.set_hourlyRate(rs.getDouble("hourly_rate"));
-                e.set_classification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+                e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a hourly");
@@ -231,7 +231,7 @@ public class DatabaseHelper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 e.set_address(rs.getString("address"));
-                e.set_method(new Mailed());
+                e.set_Imethod(new Mailed());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a mailed");
@@ -246,7 +246,7 @@ public class DatabaseHelper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 e.set_account(rs.getString("account"));
-                e.set_method(new Deposit());
+                e.set_Imethod(new Deposit());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a deposit");
@@ -261,7 +261,7 @@ public class DatabaseHelper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 e.set_address(rs.getString("address"));
-                e.set_method(new PayMaster());
+                e.set_Imethod(new PayMaster());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a paymaster");
@@ -345,13 +345,13 @@ public class DatabaseHelper {
             System.out.println(se);
         }
 
-        switch (e.get_classification().getClass().getSimpleName()) {
+        switch (e.get_Iclassification().getClass().getSimpleName()) {
         case "Salaried":
             sql = "UPDATE salaried SET salary = ? WHERE id = ?";
             try (PreparedStatement ps = this.connection.prepareStatement(sql, new String[] { "id" })) {
                 ps.setDouble(1, e.get_salary());
                 ps.setInt(2, e.get_empID());
-                e.set_classification(new Salaried(e.get_salary()));
+                e.set_Iclassification(new Salaried(e.get_salary()));
                 int id = ps.executeUpdate();
                 if (id == 0) {
                     DeleteDetails(e);
@@ -368,7 +368,7 @@ public class DatabaseHelper {
                 ps.setDouble(1, e.get_salary());
                 ps.setDouble(2, e.get_commissionRate());
                 ps.setInt(3, e.get_empID());
-                e.set_classification(new Commission(e.get_salary()));
+                e.set_Iclassification(new Commission(e.get_salary()));
                 ps.executeUpdate();
                 int id = ps.executeUpdate();
                 if (id == 0) {
@@ -385,7 +385,7 @@ public class DatabaseHelper {
                 ps.setDouble(1, e.get_hour());
                 ps.setDouble(2, e.get_hourlyRate());
                 ps.setInt(3, e.get_empID());
-                e.set_classification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+                e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
                 int id = ps.executeUpdate();
                 if (id == 0) {
                     DeleteDetails(e);
@@ -399,13 +399,13 @@ public class DatabaseHelper {
             break;
         }
 
-        switch (e.get_method().getClass().getSimpleName()) {
+        switch (e.get_Imethod().getClass().getSimpleName()) {
         case "Deposit":
             sql = "UPDATE deposit SET account = ? WHERE id = ?";
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
                 ps.setString(1, e.get_account());
                 ps.setInt(2, e.get_empID());
-                e.set_method(new Deposit());
+                e.set_Imethod(new Deposit());
                 int id = ps.executeUpdate();
                 if (id == 0) {
                     DeleteDetails(e);
@@ -420,7 +420,7 @@ public class DatabaseHelper {
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
                 ps.setString(1, e.get_address());
                 ps.setInt(2, e.get_empID());
-                e.set_method(new Mailed());
+                e.set_Imethod(new Mailed());
                 int id = ps.executeUpdate();
                 if (id == 0) {
                     DeleteDetails(e);
@@ -431,7 +431,7 @@ public class DatabaseHelper {
             }
             break;
         case "PayMaster":
-            e.set_method(new PayMaster());
+            e.set_Imethod(new PayMaster());
             break;
         default:
             break;
