@@ -25,7 +25,6 @@ export class AddUser extends Component {
         }
     }
 
-
     render() {
         return (
             <Fragment>
@@ -179,7 +178,6 @@ export class AddUser extends Component {
 
     handleSubmit = (event) => {
         console.log(this.state.Classification + " " + this.state.Method);
-
         Axios.post(`http://localhost:8080/add`, {
             _name: this.state.name,
             _address: this.state.address,
@@ -201,7 +199,5 @@ export class AddUser extends Component {
         event.preventDefault();
     }
 }
-
-
 
 export default AddUser

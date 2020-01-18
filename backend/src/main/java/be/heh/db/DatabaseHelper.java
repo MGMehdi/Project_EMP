@@ -277,11 +277,12 @@ public class DatabaseHelper {
         sql = "DELETE FROM employee where id = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
             ps.setInt(1, e.get_empID());
+            DeleteDetails(e);
             ps.executeUpdate();
         } catch (SQLException se) {
             System.out.println(se);
         }
-        DeleteDetails(e);
+        
     }
 
     private void DeleteDetails(Employee e) {

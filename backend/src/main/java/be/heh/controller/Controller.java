@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,16 @@ public class Controller {
         }
 
     }
+
+    @DeleteMapping(value = "/user/delete/{name}")
+    public void deluser(@PathVariable(name = "name") String name) {
+        Employee e = new Employee();
+        e.set_name(name);
+        db.GetEmployee(e);
+        System.out.println(e.get_empID());
+        db.DeleteEmployee(e);
+    }
+
 
     @GetMapping(value = "/users")
     public ResponseEntity getAllUser() {

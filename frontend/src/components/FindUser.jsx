@@ -10,9 +10,9 @@ export class FindUser extends Component {
             employee: null,
             name: "",
             id: null,
-            address : "",
-            account : "",
-            classification:""
+            address: "",
+            account: "",
+            classification: ""
         }
     }
     render() {
@@ -23,15 +23,15 @@ export class FindUser extends Component {
                 <h1>Find an employee</h1>
 
                 <p>Enter the name of the employee <input name="name" type="text" value={this.state.name} id="ipt_name" onChange={this.onChange} /></p>
-                <button onClick={this.onClick} className="btn btn-success">Submit</button>
+                <button onClick={this.Find} className="btn btn-success">Submit</button>
 
                 <div className="container">
                     <p>id : {this.state.id}</p>
                     <p>account : {this.state.account}</p>
                     <p>address : {this.state.address}</p>
                     <p>classification : {this.state.classification}</p>
-                    {JSON.stringify(this.state.employee)}
                 </div>
+                <button onClick={this.Delete} className="btn btn-danger">Delete</button>
             </div>
         )
     }
@@ -42,7 +42,7 @@ export class FindUser extends Component {
         })
     }
 
-    onClick = () => {
+    Find = () => {
         Axios.get(`http://localhost:8080/user/${this.state.name}`)
             .then((res) => {
                 this.setState({
@@ -50,10 +50,20 @@ export class FindUser extends Component {
                     id: res.data._empID,
                     account: res.data._account,
                     address: res.data._address,
-                    classification:res.data._classification
+                    classification: res.data._classification
                 })
-                
+
             }).catch(err => console.log(err))
+    }
+
+    Delete = () => {
+        Axios.delete(`http://localhost:8080/user/delete/${this.state.name}`)
+            .then((res) => {
+                console.log("DELETED\n" + res)
+            })
+            .catch((err) =>
+                console.log(err)
+            )
     }
 }
 export default FindUser
