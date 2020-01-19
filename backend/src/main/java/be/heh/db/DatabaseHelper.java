@@ -185,6 +185,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_salary(rs.getInt("salary"));
                 e.set_Iclassification(new Salaried(e.get_salary()));
+                e.set_classification(e.get_Iclassification().getClass().getSimpleName());
             }
             if (e.get_salary() == 0) {
                 System.out.println("Not a salaried");
@@ -201,6 +202,7 @@ public class DatabaseHelper {
                 e.set_salary(rs.getDouble("salary"));
                 e.set_commissionRate(rs.getDouble("commission_rate"));
                 e.set_Iclassification(new Commission(e.get_salary()));
+                e.set_classification(e.get_Iclassification().getClass().getSimpleName());
             }
             if (e.get_salary() == 0 && e.get_commissionRate() == 0) {
                 System.out.println("Not a commission");
@@ -217,6 +219,7 @@ public class DatabaseHelper {
                 e.set_hour(rs.getDouble("hours"));
                 e.set_hourlyRate(rs.getDouble("hourly_rate"));
                 e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+                e.set_classification(e.get_Iclassification().getClass().getSimpleName());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a hourly");
@@ -232,6 +235,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_address(rs.getString("address"));
                 e.set_Imethod(new Mailed());
+                e.set_method(e.get_Imethod().getClass().getSimpleName());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a mailed");
@@ -247,6 +251,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_account(rs.getString("account"));
                 e.set_Imethod(new Deposit());
+                e.set_method(e.get_Imethod().getClass().getSimpleName());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a deposit");
@@ -262,6 +267,7 @@ public class DatabaseHelper {
             while (rs.next()) {
                 e.set_address(rs.getString("address"));
                 e.set_Imethod(new PayMaster());
+                e.set_method(e.get_Imethod().getClass().getSimpleName());
             }
             if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
                 System.out.println("Not a paymaster");
@@ -282,7 +288,7 @@ public class DatabaseHelper {
         } catch (SQLException se) {
             System.out.println(se);
         }
-        
+
     }
 
     private void DeleteDetails(Employee e) {

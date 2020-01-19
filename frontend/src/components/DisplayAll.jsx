@@ -42,7 +42,7 @@ export class DisplayAll extends Component {
     }
 
     getAllEmployee = () => {
-        Axios.get(`http://localhost:8080/users`)
+        Axios.get(`http://localhost:8080/getusers`)
             .then((res) => {
                 this.setState({ employees: res.data })
             })

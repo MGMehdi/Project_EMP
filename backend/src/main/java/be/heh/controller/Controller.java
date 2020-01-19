@@ -43,7 +43,7 @@ public class Controller {
         return ResponseEntity.ok("Hello REST");
     }
 
-    @GetMapping(value = "/user/{name}")
+    @GetMapping(value = "/getuser/{name}")
     public ResponseEntity getuser(@PathVariable(name = "name") String name) {
         Employee e = new Employee();
         e.set_name(name);
@@ -59,7 +59,7 @@ public class Controller {
 
     }
 
-    @DeleteMapping(value = "/user/delete/{name}")
+    @DeleteMapping(value = "/user/deleteuser/{name}")
     public void deluser(@PathVariable(name = "name") String name) {
         Employee e = new Employee();
         e.set_name(name);
@@ -68,8 +68,7 @@ public class Controller {
         db.DeleteEmployee(e);
     }
 
-
-    @GetMapping(value = "/users")
+    @GetMapping(value = "/getusers")
     public ResponseEntity getAllUser() {
         Employee e = new Employee();
         ArrayList<Employee> employees = new ArrayList<>();
@@ -78,7 +77,7 @@ public class Controller {
         return ResponseEntity.ok(employees);
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/adduser")
     public ResponseEntity addUser(@RequestBody Employee e) {
 
         switch (e.get_classification()) {
@@ -94,7 +93,6 @@ public class Controller {
         default:
             break;
         }
-
         switch (e.get_method()) {
         case "Deposit":
             e.set_Imethod(new Deposit());
@@ -113,6 +111,43 @@ public class Controller {
         System.out.println(e.get_classification());
         return ResponseEntity.ok(e);
     }
+
+    @PostMapping(value = "/updateuser")
+    public ResponseEntity updateUser(@RequestBody Employee e) {
+        switch (e.get_classification()) {
+        case "Salaried":
+            e.set_Iclassification(new Salaried(e.get_salary()));
+            break;
+        case "Hourly":
+            e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+            break;
+        case "Commission":
+            e.set_Iclassification(new Commission(e.get_salary()));
+            break;
+        default:
+            break;
+        }
+        switch (e.get_method()) {
+        case "Deposit":
+            e.set_Imethod(new Deposit());
+            break;
+        case "Mailed":
+            e.set_Imethod(new Mailed());
+            break;
+        case "PayMaster":
+            e.set_Imethod(new PayMaster());
+            break;
+        default:
+            break;
+        }
+        db.UpdateEmployee(e);
+        System.out.println(e.get_empID() + " " + e.get_name() + " " + e.get_address() + " " + e.get_account() + " "
+                + e.get_Imethod().getClass().getSimpleName() + " " + e.get_Iclassification().getClass().getSimpleName() + " " + e.get_salary() + " " + e.get_hour() + " "
+                + e.get_hourlyRate());
+
+        return ResponseEntity.ok("\n" + e);
+    }
+
     // public ResponseEntity addUser(@RequestBody String json) {
     // Employee e = new Employee();
     // try {

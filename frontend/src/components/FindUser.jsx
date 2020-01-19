@@ -43,7 +43,7 @@ export class FindUser extends Component {
     }
 
     Find = () => {
-        Axios.get(`http://localhost:8080/user/${this.state.name}`)
+        Axios.get(`http://localhost:8080/getuser/${this.state.name}`)
             .then((res) => {
                 this.setState({
                     employee: res.data,
@@ -57,7 +57,7 @@ export class FindUser extends Component {
     }
 
     Delete = () => {
-        Axios.delete(`http://localhost:8080/user/delete/${this.state.name}`)
+        Axios.delete(`http://localhost:8080/deleteuser/${this.state.name}`)
             .then((res) => {
                 console.log("DELETED\n" + res)
             })

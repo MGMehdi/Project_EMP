@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react'
-import Axios from 'axios'
+import React, { Component } from 'react'
 
-export class AddUser extends Component {
+export class Form extends Component {
 
     constructor(props) {
         super(props)
@@ -27,7 +26,7 @@ export class AddUser extends Component {
 
     render() {
         return (
-            <Fragment>
+            <div>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Name</label>
@@ -40,7 +39,7 @@ export class AddUser extends Component {
 
                     <div className="form-group">
                         <label>Classification</label>
-                        <select className="form-control" id="classification" onChange={this.handleChangeclassificationMethod}>
+                        <select className="form-control" id="classification" onChange={this.handleChangeCommissionMethod}>
                             <option>---</option>
                             <option value="Commission">Commission</option>
                             <option value="Hourly">Hourly</option>
@@ -48,25 +47,25 @@ export class AddUser extends Component {
                         </select>
                         <div>
                             <label>Salary</label>
-                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} onChange={this.handleChangeSalary}/>
+                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} onChange={this.handleChangeSalary} />
                         </div>
                         <div>
                             <label>Hours</label>
-                            <input name="hours" type="number" className="form-control" placeholder="Hours" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
+                            <input name="hours" type="number" className="form-control" placeholder="Hours" disabled={!this.state.Hourly} onChange={this.handleChangeHours} />
                             <label>Hourly rate</label>
-                            <input name="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
+                            <input name="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} onChange={this.handleChangeHours} />
                         </div>
                         <div>
                             <label>Salary</label>
-                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
+                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Commission} onChange={this.handleChangeCommission} />
                             <label>Commission</label>
-                            <input name="commission" type="number" className="form-control" placeholder="Commission" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
+                            <input name="commission" type="number" className="form-control" placeholder="Commission" disabled={!this.state.Commission} onChange={this.handleChangeCommission} />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <label>Paiement method</label>
-                        <select className="form-control" id="method" onChange={this.handleChangeclassificationMethod}>
+                        <select className="form-control" id="method" onChange={this.handleChangeCommissionMethod}>
                             <option>---</option>
                             <option value="Deposit">Direct deposit</option>
                             <option value="Mailed">Mailed</option>
@@ -75,30 +74,29 @@ export class AddUser extends Component {
                     </div>
                     <input type="submit" value="Submit" />
                 </form>
-            </Fragment>
+            </div>
         )
     }
-
     handleChangeSalary = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            commission:0,
-            hours:0,
-            hourly:0
+            commission: 0,
+            hours: 0,
+            hourly: 0
         })
     }
     handleChangeCommission = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            hours:0,
-            hourly:0
+            hours: 0,
+            hourly: 0
         })
     }
     handleChangeHours = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            commission:0,
-            salary:0
+            commission: 0,
+            salary: 0
         })
     }
 
@@ -108,7 +106,7 @@ export class AddUser extends Component {
         })
     }
 
-    handleChangeclassificationMethod = (event) => {
+    handleChangeCommissionMethod = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -175,29 +173,5 @@ export class AddUser extends Component {
                 break;
         }
     }
-
-    handleSubmit = (event) => {
-        console.log(this.state.Classification + " " + this.state.Method);
-        Axios.post(`http://localhost:8080/adduser`, {
-            _name: this.state.name,
-            _address: this.state.address,
-            _account: this.state.account,
-            _classification: this.state.Classification,
-            _method: this.state.Method,
-            _hourlyRate: this.state.hourly,
-            _hour: this.state.hours,
-            _salary: this.state.salary,
-            _commissionRate: this.state.commission
-        })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        event.preventDefault();
-    }
 }
-
-export default AddUser
+export default Form
