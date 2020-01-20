@@ -176,7 +176,6 @@ export class AddUser extends Component {
             .catch(err => {
                 console.log(err);
             })
-        event.preventDefault();
     }
 }
 

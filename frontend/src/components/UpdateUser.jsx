@@ -63,7 +63,7 @@ export class UpdateUser extends Component {
                             <option value="PayMaster">PayMaster</option>
                         </select>
                     </div>
-                    <input type="button" value="Submit" onClick={this.UpdateUser} />
+                    <input type="submit" value="Submit" onClick={this.UpdateUser} />
                 </form>
                 <button onClick={this.findUser}>HOHE</button>
             </div>

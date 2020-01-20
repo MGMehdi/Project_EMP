@@ -80,7 +80,7 @@ public class DatabaseHelper {
                 ps.executeUpdate();
 
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert salaried" + se);
             }
             break;
 
@@ -91,7 +91,7 @@ public class DatabaseHelper {
                 ps.setDouble(2, e.get_hourlyRate());
                 ps.executeUpdate();
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert hourly" + se);
             }
             break;
 
@@ -103,7 +103,7 @@ public class DatabaseHelper {
                 ps.setDouble(3, e.get_commissionRate());
                 ps.executeUpdate();
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert commission" + se);
             }
             break;
         default:
@@ -119,7 +119,7 @@ public class DatabaseHelper {
                 ps.setString(2, e.get_account());
                 ps.executeUpdate();
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert deposit" + se);
             }
             break;
         case "Mailed":
@@ -129,7 +129,7 @@ public class DatabaseHelper {
                 ps.setString(2, e.get_address());
                 ps.executeUpdate();
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert mailed" + se);
             }
             break;
         case "PayMaster":
@@ -138,7 +138,7 @@ public class DatabaseHelper {
                 ps.setInt(1, e.get_empID());
                 ps.executeUpdate();
             } catch (Exception se) {
-                System.out.println(se);
+                System.out.println("Insert paymaster" + se);
             }
             break;
         default:
@@ -200,7 +200,7 @@ public class DatabaseHelper {
                 System.out.println("Not a salaried");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select salaried" + se);
         }
         // COMMISSION
         sql = "SELECT * FROM commission WHERE id = ?";
@@ -217,7 +217,7 @@ public class DatabaseHelper {
                 System.out.println("Not a commission");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select commision" + se);
         }
         // HOURLY
         sql = "SELECT * FROM hourly WHERE id = ?";
@@ -233,7 +233,7 @@ public class DatabaseHelper {
                 System.out.println("Not a hourly");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select hourly" + se);
         }
         // Mailed
         sql = "SELECT * FROM mailed WHERE id = ?";
@@ -249,7 +249,7 @@ public class DatabaseHelper {
                 System.out.println("Not a mailed");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select mailed" + se);
         }
         // Deposit
         sql = "SELECT * FROM deposit WHERE id = ?";
@@ -265,7 +265,7 @@ public class DatabaseHelper {
                 System.out.println("Not a deposit");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select deposit" + se);
         }
         // Paymaster
         sql = "SELECT * FROM paymaster WHERE id = ?";
@@ -273,7 +273,6 @@ public class DatabaseHelper {
             ps.setInt(1, e.get_empID());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                e.set_address(rs.getString("address"));
                 e.set_Imethod(new PayMaster());
                 e.set_method(e.get_Imethod().getClass().getSimpleName());
             }
@@ -281,7 +280,7 @@ public class DatabaseHelper {
                 System.out.println("Not a paymaster");
             }
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("select paymaster" + se);
         }
         return e;
     }
@@ -303,6 +302,7 @@ public class DatabaseHelper {
         String sql = "DELETE FROM hourly where id IN (SELECT ? FROM employee)";
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
             ps.setInt(1, e.get_empID());
+            DeleteTimeCard(e);
             ps.executeUpdate();
         } catch (SQLException se) {
             System.out.println(se);
@@ -445,9 +445,9 @@ public class DatabaseHelper {
             }
             break;
         case "PayMaster":
-            e.set_Imethod(new PayMaster());
             DeleteDetails(e);
             AddInfo(e);
+            e.set_Imethod(new PayMaster());
             break;
         default:
             break;
@@ -482,6 +482,17 @@ public class DatabaseHelper {
             System.out.println(ex);
         }
         return e;
+    }
+
+    public void DeleteTimeCard(Employee e) {
+        String sql = "DELETE FROM timecard where id IN (SELECT ? FROM employee)";
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setInt(1, e.get_empID());
+            ps.executeUpdate(); 
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
 }

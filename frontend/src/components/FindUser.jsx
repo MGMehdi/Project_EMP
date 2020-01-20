@@ -28,7 +28,9 @@ export class FindUser extends Component {
                     <p>method : {this.state.employee._method}</p>
                     <p>salary : {this.state.employee._salary}</p>
                 </div>
-                <button onClick={this.Delete} className="btn btn-danger">Delete</button>
+                <form onSubmit={this.Delete}>
+                    <button onClick={this.Delete} className="btn btn-danger">Delete</button>
+                </form>
             </div>
         )
     }

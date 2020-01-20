@@ -42,12 +42,12 @@ public class Controller {
 
     @GetMapping(value = "/getuser/{name}")
     public ResponseEntity getuser(@PathVariable(name = "name") String name) {
+        System.out.println("COUCOU");
+
         Employee e = new Employee();
         e.set_name(name);
         db.GetEmployee(e);
         db.GetTimeCard(e);
-
-        System.out.println("MEHTOD " + e.get_Imethod().getClass().getSimpleName());
 
         e.set_salary(e.calculatePay());
 
@@ -59,7 +59,7 @@ public class Controller {
 
     }
 
-    @DeleteMapping(value = "/user/deleteuser/{name}")
+    @DeleteMapping(value = "/deleteuser/{name}")
     public void deluser(@PathVariable(name = "name") String name) {
         Employee e = new Employee();
         e.set_name(name);
