@@ -21,7 +21,7 @@ public class Employee {
 
     private double _hourlyRate;
     private double _hour;
-    private ArrayList <Double> _hours = new ArrayList<>();
+    private ArrayList <Double> _hourList = new ArrayList<>();
     private double _salary;
     private double _commissionRate;
 
@@ -131,11 +131,26 @@ public class Employee {
         this._method = _method;
     }
 
+    public ArrayList<Double> get_hourList() {
+        return _hourList;
+    }
+
+    public void set_hourList(ArrayList<Double> _hourList) {
+        this._hourList = _hourList;
+    }
+
+    public void addHours(double hour) {
+        this._hourList.add(hour);
+    }
     /*****************************************************************************************************/
 
     public double calculatePay() {
         return this._Iclassification.get_pay();
     }
+
+    
+
+    
 
     
     

@@ -20,7 +20,6 @@ export class AddUser extends Component {
             PayMaster: "",
             salary: 0,
             commission: "",
-            hours: 0,
             hourly: 0
         }
     }
@@ -51,8 +50,6 @@ export class AddUser extends Component {
                             <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} onChange={this.handleChangeSalary}/>
                         </div>
                         <div>
-                            <label>Hours</label>
-                            <input name="hours" type="number" className="form-control" placeholder="Hours" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
                             <label>Hourly rate</label>
                             <input name="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
                         </div>
@@ -185,7 +182,6 @@ export class AddUser extends Component {
             _classification: this.state.Classification,
             _method: this.state.Method,
             _hourlyRate: this.state.hourly,
-            _hour: this.state.hours,
             _salary: this.state.salary,
             _commissionRate: this.state.commission
         })

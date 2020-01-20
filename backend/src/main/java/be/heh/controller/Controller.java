@@ -7,6 +7,7 @@ import be.heh.employee.Employee;
 import be.heh.employee.classification.Commission;
 import be.heh.employee.classification.Hourly;
 import be.heh.employee.classification.Salaried;
+import be.heh.employee.classification.TimeCard;
 import be.heh.employee.method.Deposit;
 import be.heh.employee.method.Mailed;
 import be.heh.employee.method.PayMaster;
@@ -48,12 +49,13 @@ public class Controller {
         Employee e = new Employee();
         e.set_name(name);
         db.GetEmployee(e);
-        System.out.println(e.get_Iclassification().getClass().getSimpleName());
+        db.GetTimeCard(e);
+
+        e.set_salary(e.calculatePay());
 
         if (e.get_empID() == 0) {
             return ResponseEntity.notFound().build();
         } else {
-            System.out.println(ResponseEntity.ok(e));
             return ResponseEntity.ok(e);
         }
 
@@ -85,7 +87,7 @@ public class Controller {
             e.set_Iclassification(new Salaried(e.get_salary()));
             break;
         case "Hourly":
-            e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+            e.set_Iclassification(new Hourly(e.get_hourlyRate()));
             break;
         case "Commission":
             e.set_Iclassification(new Commission(e.get_salary()));
@@ -108,7 +110,7 @@ public class Controller {
         }
 
         db.AddEmployee(e);
-        System.out.println(e.get_classification());
+        System.out.println(e.get_Iclassification().get_pay());
         return ResponseEntity.ok(e);
     }
 
@@ -119,7 +121,7 @@ public class Controller {
             e.set_Iclassification(new Salaried(e.get_salary()));
             break;
         case "Hourly":
-            e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+            e.set_Iclassification(new Hourly(e.get_hourlyRate()));
             break;
         case "Commission":
             e.set_Iclassification(new Commission(e.get_salary()));
@@ -142,10 +144,19 @@ public class Controller {
         }
         db.UpdateEmployee(e);
         System.out.println(e.get_empID() + " " + e.get_name() + " " + e.get_address() + " " + e.get_account() + " "
-                + e.get_Imethod().getClass().getSimpleName() + " " + e.get_Iclassification().getClass().getSimpleName() + " " + e.get_salary() + " " + e.get_hour() + " "
-                + e.get_hourlyRate());
+                + e.get_Imethod().getClass().getSimpleName() + " " + e.get_Iclassification().getClass().getSimpleName()
+                + " " + e.get_salary() + " " + e.get_hourlyRate());
 
         return ResponseEntity.ok("\n" + e);
+    }
+
+    @PostMapping(value = "/timecard/{id}")
+    public ResponseEntity AddTimeCard(@PathVariable(name = "id") int id, @RequestParam Double hours) {
+        Employee e = new Employee();
+        e.set_empID(id);
+        System.out.println("Resultat " + " " + hours + " " + id);
+        db.AddTimeCard(hours, e);
+        return ResponseEntity.ok(0);
     }
 
     // public ResponseEntity addUser(@RequestBody String json) {

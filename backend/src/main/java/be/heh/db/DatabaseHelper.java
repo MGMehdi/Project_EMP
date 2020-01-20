@@ -11,6 +11,7 @@ import be.heh.employee.Employee;
 import be.heh.employee.classification.Commission;
 import be.heh.employee.classification.Hourly;
 import be.heh.employee.classification.Salaried;
+import be.heh.employee.classification.TimeCard;
 import be.heh.employee.method.Deposit;
 import be.heh.employee.method.Mailed;
 import be.heh.employee.method.PayMaster;
@@ -84,11 +85,10 @@ public class DatabaseHelper {
             break;
 
         case "Hourly":
-            sql = "INSERT INTO hourly (id, hours, hourly_rate) VALUES ((SELECT id FROM employee WHERE id=?), ?, ?)";
+            sql = "INSERT INTO hourly (id, hourly_rate) VALUES ((SELECT id FROM employee WHERE id=?), ?)";
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
                 ps.setInt(1, e.get_empID());
-                ps.setDouble(2, e.get_hour());
-                ps.setDouble(3, e.get_hourlyRate());
+                ps.setDouble(2, e.get_hourlyRate());
                 ps.executeUpdate();
             } catch (Exception se) {
                 // TODO: handle exception
@@ -216,12 +216,11 @@ public class DatabaseHelper {
             ps.setInt(1, e.get_empID());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                e.set_hour(rs.getDouble("hours"));
                 e.set_hourlyRate(rs.getDouble("hourly_rate"));
-                e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+                e.set_Iclassification(new Hourly(e.get_hourlyRate(), e.get_hourList()));
                 e.set_classification(e.get_Iclassification().getClass().getSimpleName());
             }
-            if (e.get_hourlyRate() == 0 && e.get_hour() == 0) {
+            if (e.get_hourlyRate() == 0) {
                 System.out.println("Not a hourly");
             }
         } catch (SQLException se) {
@@ -387,12 +386,11 @@ public class DatabaseHelper {
             }
             break;
         case "Hourly":
-            sql = "UPDATE hourly SET hours = ?, hourly_rate = ? WHERE id = ?";
+            sql = "UPDATE hourly SET hourly_rate = ? WHERE id = ?";
             try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
-                ps.setDouble(1, e.get_hour());
-                ps.setDouble(2, e.get_hourlyRate());
-                ps.setInt(3, e.get_empID());
-                e.set_Iclassification(new Hourly(e.get_hour(), e.get_hourlyRate()));
+                ps.setDouble(1, e.get_hourlyRate());
+                ps.setInt(2, e.get_empID());
+                e.set_Iclassification(new Hourly(e.get_hourlyRate()));
                 int id = ps.executeUpdate();
                 if (id == 0) {
                     DeleteDetails(e);
@@ -444,6 +442,34 @@ public class DatabaseHelper {
             break;
         }
 
+        return e;
+    }
+
+    public void AddTimeCard(double hours, Employee e) {
+        String sql = "INSERT INTO timecard(id, hours) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setInt(1, e.get_empID());
+            ps.setDouble(2, hours);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public Employee GetTimeCard(Employee e) {
+        String sql = "SELECT * FROM timecard WHERE id=?";
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setInt(1, e.get_empID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                e.addHours(rs.getDouble("hours"));
+            }        
+            return e;
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
         return e;
     }
 

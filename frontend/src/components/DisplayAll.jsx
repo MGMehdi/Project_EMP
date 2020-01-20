@@ -45,7 +45,13 @@ export class DisplayAll extends Component {
         Axios.get(`http://localhost:8080/getusers`)
             .then((res) => {
                 this.setState({ employees: res.data })
+                console.log(res.data);
             })
+           .catch(err => {
+               console.log(err);
+               
+           })
+            
     }
 }
 

@@ -43,7 +43,6 @@ export class UpdateUser extends Component {
                         </div>
                         <div>
                             <label>Hours</label>
-                            <input id="hours" type="number" className="form-control" placeholder="Hours" disabled={true} />
                             <label>Hourly rate</label>
                             <input id="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={true} />
                         </div>
@@ -80,7 +79,6 @@ export class UpdateUser extends Component {
         switch (event.target.value) {
             case "Commission":
                 document.getElementById("salary").disabled = true
-                document.getElementById("hours").disabled = true
                 document.getElementById("hourly").disabled = true
                 document.getElementById("commission").disabled = false
                 document.getElementById("commissionSalary").disabled = false
@@ -88,21 +86,18 @@ export class UpdateUser extends Component {
                 break;
             case "Hourly":
                 document.getElementById("salary").disabled = true
-                document.getElementById("hours").disabled = false
                 document.getElementById("hourly").disabled = false
                 document.getElementById("commission").disabled = true
                 document.getElementById("commissionSalary").disabled = true
                 break;
             case "Salaried":
                 document.getElementById("salary").disabled = false
-                document.getElementById("hours").disabled = true
                 document.getElementById("hourly").disabled = true
                 document.getElementById("commission").disabled = true
                 document.getElementById("commissionSalary").disabled = true
                 break;
             default:
                 document.getElementById("salary").disabled = true
-                document.getElementById("hours").disabled = true
                 document.getElementById("hourly").disabled = true
                 document.getElementById("commission").disabled = true
                 document.getElementById("commissionSalary").disabled = true
@@ -132,7 +127,6 @@ export class UpdateUser extends Component {
                         break;
                     case "Hourly":
                         document.getElementById("classification").value = "Hourly"
-                        document.getElementById("hours").value = this.state.employee._hour
                         document.getElementById("hourly").value = this.state.employee._hourlyRate
                         break;
                     case "Commission":
@@ -172,7 +166,6 @@ export class UpdateUser extends Component {
             _classification: document.getElementById("classification").value,
             _method: document.getElementById("method").value,
             _salary: 0,
-            _hour: 0,
             _hourlyRate: 0,
             _commission: 0,
         }
@@ -185,7 +178,6 @@ export class UpdateUser extends Component {
                 emp._commission = document.getElementById("commission").value
                 break;
             case "Hourly":
-                emp._hour = document.getElementById("hours").value
                 emp._hourlyRate = document.getElementById("hourly").value
                 break;
             default:

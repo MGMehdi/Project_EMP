@@ -7,7 +7,7 @@ export class FindUser extends Component {
         super(props)
 
         this.state = {
-            employee: null,
+            employee: "",
             name: "",
             id: null,
             address: "",
@@ -26,10 +26,12 @@ export class FindUser extends Component {
                 <button onClick={this.Find} className="btn btn-success">Submit</button>
 
                 <div className="container">
-                    <p>id : {this.state.id}</p>
-                    <p>account : {this.state.account}</p>
-                    <p>address : {this.state.address}</p>
-                    <p>classification : {this.state.classification}</p>
+                    <p>id : {this.state.employee._empID}</p>
+                    <p>account : {this.state.employee._account}</p>
+                    <p>address : {this.state.employee._address}</p>
+                    <p>classification : {this.state.employee._classification}</p>
+                    <p>method : {this.state.employee._method}</p>
+                    <p>salary : {this.state.employee._salary}</p>
                 </div>
                 <button onClick={this.Delete} className="btn btn-danger">Delete</button>
             </div>
@@ -52,7 +54,8 @@ export class FindUser extends Component {
                     address: res.data._address,
                     classification: res.data._classification
                 })
-
+                console.log(res.data._salary);
+                
             }).catch(err => console.log(err))
     }
 

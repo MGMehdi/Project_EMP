@@ -6,6 +6,7 @@ import FindUser from './FindUser';
 import DisplayAll from './DisplayAll';
 import AddUser from './AddUser';
 import UpdateUser from './UpdateUser';
+import Timecard from './Timecard';
 
 function Rout() {
     return (
@@ -17,6 +18,7 @@ function Rout() {
                     <Route path="/users" component={DisplayAll}></Route>
                     <Route path="/add" component={AddUser}></Route>
                     <Route path="/update" component={UpdateUser}></Route>
+                    <Route path="/timecard" component={Timecard}></Route>
                 </Switch>
             </Router>
         </div>
