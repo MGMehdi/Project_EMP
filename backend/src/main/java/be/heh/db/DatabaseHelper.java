@@ -80,7 +80,7 @@ public class DatabaseHelper {
                 ps.executeUpdate();
 
             } catch (Exception se) {
-                // TODO: handle exception
+                System.out.println(se);
             }
             break;
 
@@ -91,7 +91,7 @@ public class DatabaseHelper {
                 ps.setDouble(2, e.get_hourlyRate());
                 ps.executeUpdate();
             } catch (Exception se) {
-                // TODO: handle exception
+                System.out.println(se);
             }
             break;
 
@@ -103,7 +103,7 @@ public class DatabaseHelper {
                 ps.setDouble(3, e.get_commissionRate());
                 ps.executeUpdate();
             } catch (Exception se) {
-                // TODO: handle exception
+                System.out.println(se);
             }
             break;
         default:
@@ -119,7 +119,7 @@ public class DatabaseHelper {
                 ps.setString(2, e.get_account());
                 ps.executeUpdate();
             } catch (Exception se) {
-                // TODO: handle exception
+                System.out.println(se);
             }
             break;
         case "Mailed":
@@ -129,7 +129,16 @@ public class DatabaseHelper {
                 ps.setString(2, e.get_address());
                 ps.executeUpdate();
             } catch (Exception se) {
-                // TODO: handle exception
+                System.out.println(se);
+            }
+            break;
+        case "PayMaster":
+            sql = "INSERT INTO paymaster (id) VALUES ((SELECT id FROM employee WHERE id=?))";
+            try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+                ps.setInt(1, e.get_empID());
+                ps.executeUpdate();
+            } catch (Exception se) {
+                System.out.println(se);
             }
             break;
         default:
@@ -437,6 +446,8 @@ public class DatabaseHelper {
             break;
         case "PayMaster":
             e.set_Imethod(new PayMaster());
+            DeleteDetails(e);
+            AddInfo(e);
             break;
         default:
             break;
@@ -465,7 +476,7 @@ public class DatabaseHelper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 e.addHours(rs.getDouble("hours"));
-            }        
+            }
             return e;
         } catch (Exception ex) {
             System.out.println(ex);

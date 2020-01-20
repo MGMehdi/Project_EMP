@@ -1,12 +1,11 @@
-import React from 'react'
-import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Employee from './Employee'
-import NavBar from './NavBar'
-import FindUser from './FindUser';
-import DisplayAll from './DisplayAll';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AddUser from './AddUser';
-import UpdateUser from './UpdateUser';
+import DisplayAll from './DisplayAll';
+import FindUser from './FindUser';
+import NavBar from './NavBar';
 import Timecard from './Timecard';
+import UpdateUser from './UpdateUser';
 
 function Rout() {
     return (

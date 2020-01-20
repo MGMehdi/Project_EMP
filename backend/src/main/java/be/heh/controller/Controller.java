@@ -1,20 +1,6 @@
 package be.heh.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import be.heh.db.DatabaseHelper;
-import be.heh.employee.Employee;
-import be.heh.employee.classification.Commission;
-import be.heh.employee.classification.Hourly;
-import be.heh.employee.classification.Salaried;
-import be.heh.employee.classification.TimeCard;
-import be.heh.employee.method.Deposit;
-import be.heh.employee.method.Mailed;
-import be.heh.employee.method.PayMaster;
-
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +10,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import be.heh.db.DatabaseHelper;
+import be.heh.employee.Employee;
+import be.heh.employee.classification.Commission;
+import be.heh.employee.classification.Hourly;
+import be.heh.employee.classification.Salaried;
+import be.heh.employee.method.Deposit;
+import be.heh.employee.method.Mailed;
+import be.heh.employee.method.PayMaster;
 
 /**
  * Controller
@@ -50,6 +46,8 @@ public class Controller {
         e.set_name(name);
         db.GetEmployee(e);
         db.GetTimeCard(e);
+
+        System.out.println("MEHTOD " + e.get_Imethod().getClass().getSimpleName());
 
         e.set_salary(e.calculatePay());
 

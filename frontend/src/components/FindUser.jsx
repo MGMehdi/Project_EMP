@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import Employee from './Employee'
 import Axios from 'axios'
+import React, { Component } from 'react'
 
 export class FindUser extends Component {
     constructor(props) {

@@ -30,16 +30,17 @@ export class AddUser extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Name</label>
-                        <input name="name" type="text" className="form-control" placeholder="Name" onChange={this.handleChangeInfo} />
+                        <input type="text" className="form-control" id="name" name="name" placeholder="Name" onChange={this.handleChangeName} />
                         <label>Address</label>
-                        <input name="address" type="text" className="form-control" placeholder="Address" onChange={this.handleChangeInfo} />
+                        <input type="text" className="form-control" id="address" name="address" placeholder="Address" />
                         <label>Account</label>
-                        <input name="account" type="text" className="form-control" placeholder="Account" onChange={this.handleChangeInfo} />
+                        <input type="text" className="form-control" id="account" name="account" placeholder="Account" />
+
                     </div>
 
                     <div className="form-group">
                         <label>Classification</label>
-                        <select className="form-control" id="classification" onChange={this.handleChangeclassificationMethod}>
+                        <select className="form-control" id="classification" onChange={this.handleChangeclassification}>
                             <option>---</option>
                             <option value="Commission">Commission</option>
                             <option value="Hourly">Hourly</option>
@@ -47,17 +48,18 @@ export class AddUser extends Component {
                         </select>
                         <div>
                             <label>Salary</label>
-                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Salaried} onChange={this.handleChangeSalary}/>
+                            <input id="salary" type="number" className="form-control" placeholder="Salary" disabled={true} />
                         </div>
                         <div>
+                            <label>Hours</label>
                             <label>Hourly rate</label>
-                            <input name="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={!this.state.Hourly} onChange={this.handleChangeHours}/>
+                            <input id="hourly" type="number" className="form-control" placeholder="Hourly rate" disabled={true} />
                         </div>
                         <div>
                             <label>Salary</label>
-                            <input name="salary" type="number" className="form-control" placeholder="Salary" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
+                            <input id="commissionSalary" type="number" className="form-control" placeholder="Salary" disabled={true} />
                             <label>Commission</label>
-                            <input name="commission" type="number" className="form-control" placeholder="Commission" disabled={!this.state.Commission} onChange={this.handleChangeCommission}/>
+                            <input id="commission" type="number" className="form-control" placeholder="Commission" disabled={true} />
                         </div>
                     </div>
 
@@ -79,23 +81,23 @@ export class AddUser extends Component {
     handleChangeSalary = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            commission:0,
-            hours:0,
-            hourly:0
+            commission: 0,
+            hours: 0,
+            hourly: 0
         })
     }
     handleChangeCommission = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            hours:0,
-            hourly:0
+            hours: 0,
+            hourly: 0
         })
     }
     handleChangeHours = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            commission:0,
-            salary:0
+            commission: 0,
+            salary: 0
         })
     }
 
@@ -105,89 +107,68 @@ export class AddUser extends Component {
         })
     }
 
-    handleChangeclassificationMethod = (event) => {
+    handleChangeclassification = (event) => {
         this.setState({
-            [event.target.name]: event.target.value
+            selectedClassification: event.target.value
         })
         switch (event.target.value) {
-            case "Salaried":
-                this.setState({
-                    Commission: "",
-                    Hourly: "",
-                    Salaried: "Salaried",
-                    Classification: "Salaried"
-                })
+            case "Commission":
+                document.getElementById("salary").disabled = true
+                document.getElementById("hourly").disabled = true
+                document.getElementById("commission").disabled = false
+                document.getElementById("commissionSalary").disabled = false
+
                 break;
             case "Hourly":
-                this.setState({
-                    Commission: "",
-                    Hourly: "Hourly",
-                    Salaried: "",
-                    Classification: "Hourly"
-                })
+                document.getElementById("salary").disabled = true
+                document.getElementById("hourly").disabled = false
+                document.getElementById("commission").disabled = true
+                document.getElementById("commissionSalary").disabled = true
                 break;
-            case "Commission":
-                this.setState({
-                    Commission: "Commission",
-                    Hourly: "",
-                    Salaried: "",
-                    Classification: "Commission"
-                })
-                break;
-            case "Deposit":
-                this.setState({
-                    Deposit: "Deposit",
-                    Mailed: "",
-                    PayMaster: "",
-                    Method: "Deposit"
-                })
-                break;
-            case "Mailed":
-                this.setState({
-                    Deposit: "",
-                    Mailed: "Mailed",
-                    PayMaster: "",
-                    Method: "Mailed"
-                })
-                break;
-            case "PayMaster":
-                this.setState({
-                    Deposit: "",
-                    Mailed: "",
-                    PayMaster: "PayMaster",
-                    Method: "PayMaster"
-                })
+            case "Salaried":
+                document.getElementById("salary").disabled = false
+                document.getElementById("hourly").disabled = true
+                document.getElementById("commission").disabled = true
+                document.getElementById("commissionSalary").disabled = true
                 break;
             default:
-                this.setState({
-                    Commission: "",
-                    Hourly: "",
-                    Salaried: "",
-                    Deposit: "",
-                    Mailed: "",
-                    PayMaster: "",
-                    Classification: "",
-                    Method: ""
-                })
+                document.getElementById("salary").disabled = true
+                document.getElementById("hourly").disabled = true
+                document.getElementById("commission").disabled = true
+                document.getElementById("commissionSalary").disabled = true
                 break;
         }
     }
 
     handleSubmit = (event) => {
         const emp = {
-            _name: this.state.name,
-            _address: this.state.address,
-            _account: this.state.account,
-            _classification: this.state.Classification,
-            _method: this.state.Method,
-            _hourlyRate: this.state.hourly,
-            _salary: this.state.salary,
-            _commissionRate: this.state.commission
+            _name: document.getElementById("name").value,
+            _address: document.getElementById("address").value,
+            _account: document.getElementById("account").value,
+            _classification: document.getElementById("classification").value,
+            _method: document.getElementById("method").value,
+            _hourlyRate: document.getElementById("hourly").value,
+            _salary: document.getElementById("salary").value,
+            _commissionRate: document.getElementById("commission").value
+        }
+        switch (emp._classification) {
+            case "Salaried":
+                emp._salary = document.getElementById("salary").value
+                break;
+            case "Commission":
+                emp._salary = document.getElementById("commissionSalary").value
+                emp._commission = document.getElementById("commission").value
+                break;
+            case "Hourly":
+                emp._hourlyRate = document.getElementById("hourly").value
+                break;
+            default:
+                console.log("CACA");
+
+                break;
         }
         console.log(this.state.Classification + " " + this.state.Method);
-        Axios.post(`http://localhost:8080/adduser`, {
-            
-        })
+        Axios.post(`http://localhost:8080/adduser`, emp)
             .then(res => {
                 console.log(res);
                 console.log(res.data);

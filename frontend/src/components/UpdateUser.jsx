@@ -72,7 +72,6 @@ export class UpdateUser extends Component {
 
 
     handleChangeclassification = (event) => {
-
         this.setState({
             selectedClassification: event.target.value
         })

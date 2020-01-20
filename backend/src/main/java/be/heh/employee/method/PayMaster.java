@@ -10,7 +10,6 @@ public class PayMaster implements I_Method {
 
     @Override
     public String get_method() {
-        // TODO Auto-generated method stub
         return "Paymaster";
     }
 
