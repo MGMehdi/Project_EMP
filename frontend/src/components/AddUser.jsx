@@ -174,8 +174,7 @@ export class AddUser extends Component {
     }
 
     handleSubmit = (event) => {
-        console.log(this.state.Classification + " " + this.state.Method);
-        Axios.post(`http://localhost:8080/adduser`, {
+        const emp = {
             _name: this.state.name,
             _address: this.state.address,
             _account: this.state.account,
@@ -184,6 +183,10 @@ export class AddUser extends Component {
             _hourlyRate: this.state.hourly,
             _salary: this.state.salary,
             _commissionRate: this.state.commission
+        }
+        console.log(this.state.Classification + " " + this.state.Method);
+        Axios.post(`http://localhost:8080/adduser`, {
+            
         })
             .then(res => {
                 console.log(res);

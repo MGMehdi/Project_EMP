@@ -8,11 +8,7 @@ export class FindUser extends Component {
 
         this.state = {
             employee: "",
-            name: "",
-            id: null,
-            address: "",
-            account: "",
-            classification: ""
+            name: ""
         }
     }
     render() {
@@ -49,13 +45,9 @@ export class FindUser extends Component {
             .then((res) => {
                 this.setState({
                     employee: res.data,
-                    id: res.data._empID,
-                    account: res.data._account,
-                    address: res.data._address,
-                    classification: res.data._classification
                 })
                 console.log(res.data._salary);
-                
+
             }).catch(err => console.log(err))
     }
 
